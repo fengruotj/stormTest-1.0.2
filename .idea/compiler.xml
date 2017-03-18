@@ -24,13 +24,19 @@
         <processorPath useClasspath="true" />
         <module name="stormTest" />
         <module name="stormTest-1.0.1" />
+      </profile>
+      <profile default="false" name="Annotation profile for stormTest-1.0.2" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
         <module name="stormTest-1.0.2" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="stormTest" target="1.5" />
       <module name="stormTest-1.0.1" target="1.5" />
-      <module name="stormTest-1.0.2" target="1.5" />
+      <module name="stormTest-1.0.2" target="1.7" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -1,6 +1,6 @@
 package com.basic.storm.topology;
 
-import com.basic.storm.bolt.WordCountBolt;
+import com.basic.storm.bolt.HdfsWordCount;
 import com.basic.storm.bolt.report.ReportBolt;
 import com.basic.storm.bolt.report.WordCountReportBolt;
 import org.apache.storm.Config;
@@ -17,7 +17,8 @@ import org.apache.storm.utils.Utils;
 
 /**
  * Created by 79875 on 2017/3/18.
- * 提交stormtopology任务 storm jar stormTest-1.0.2-SNAPSHOT-jar-with-dependencies.jar com.basic.storm.topology.HdfsWordCountTopology stormwordcount 10 10 10 1
+ * 提交stormtopology任务 storm jar stormTest-1.0.2-SNAPSHOT.jar com.basic.storm.topology.HdfsWordCountTopology hdfswordcount 8 8 16 1 /user/root/input /user/root/output /user/root/baddir
+
  */
 public class HdfsWordCountTopology {
     public static final String HDFS_SPOUT_ID ="hdfs-spout";
@@ -32,7 +33,7 @@ public class HdfsWordCountTopology {
 
         HdfsSpout hdfsSpout=new HdfsSpout().withOutputFields("word");
 
-        WordCountBolt wordCountBolt=new WordCountBolt();
+        HdfsWordCount wordCountBolt=new HdfsWordCount();
         ReportBolt reportBolt=new ReportBolt();
         WordCountReportBolt wordCountReportBolt=new WordCountReportBolt();
 
