@@ -29,6 +29,7 @@ public class BenchMarkTopology {
     public static final String COMPUTE_STREAM_ID="computestream";
     public static final String WORDCOUNT_STREAM_ID="wordcountstream";
     public static final String TUPLECOUNT_STREAM_ID="tuplecountstream";
+
     public static void main(String[] args) throws InvalidTopologyException, AuthorizationException, AlreadyAliveException {
 
         SentenceSpout spout=new SentenceSpout();
@@ -59,6 +60,7 @@ public class BenchMarkTopology {
         //Topology配置
         Config config=new Config();
         config.setNumWorkers(numworkers);//设置两个Worker进程
+        config.setNumAckers(0);//每个Work进程会运行一个Acker任务，这里将Ack任务设置为0 禁止Ack任务
 
         if(args[0].equals("local")){
             LocalCluster localCluster=new LocalCluster();

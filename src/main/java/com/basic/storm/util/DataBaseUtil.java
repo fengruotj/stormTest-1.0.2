@@ -110,6 +110,27 @@ public class DataBaseUtil {
     }
 
     /**
+     * 插入数据到spouttupleCount表中
+     * @param time
+     * @param bytecount
+     */
+    public static void insertHdfsByteCount(Timestamp time,Long bytecount){
+        try {
+            PreparedStatement preparedStatement;
+            String sql = "INSERT INTO t_hdfsbytecount(time,bytecount)"
+                    + " VALUES (?,?)";  // 插入数据的sql语句
+            preparedStatement = conn.prepareStatement(sql);    // 创建用于执行静态sql语句的Statement对象
+            preparedStatement.setTimestamp(1,time);
+            preparedStatement.setLong(2,bytecount);
+            int count = preparedStatement.executeUpdate();  // 执行插入操作的sql语句，并返回插入数据的个数
+            preparedStatement.close();
+            logger.info("insert into t_hdfsbytecount (time,bytecount) values"+time+" "+bytecount);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * 插入数据到tupleLatency表中
      * @param time
      * @param latency

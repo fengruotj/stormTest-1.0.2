@@ -34,8 +34,6 @@ public class HdfsWordCount  extends BaseRichBolt {
     private long startTimemills;//开始时间 ms
     private long endTimemills;//结束时间 ms
     private OutputCollector outputCollector;
-    private long delaystartTimemills;//处理逻辑起始时间 用来统计延迟
-    private long delayendTimemills;//处理逻辑结束时间  用来统计延迟
     private HashMap<String,Long> counts=null;
 
     static {
@@ -77,10 +75,6 @@ public class HdfsWordCount  extends BaseRichBolt {
         this.counts.put(word,counts);
         outputCollector.emit(WORDCOUNT_STREAM_ID,new Values(word,counts));
         //logger.info("------------ KafkaWordCountBolt emit wordcounStream------------"+" word:"+word+" count:"+counts);
-        //屏蔽代码
-        delayendTimemills=System.currentTimeMillis();
-        //将算出延迟写入文件
-        Long delay=delayendTimemills-delaystartTimemills;
 
         //将输出结果发送给下游SpoutReport输出
         if(!resultQueue.isEmpty()){
