@@ -20,16 +20,34 @@ import org.apache.storm.utils.Utils;
 public class HdfsBenchMarkTopology {
 
     public static final String HDFS_SPOUT_ID ="hdfs-spout";
+    public static final String HDFS_BOLT_ID ="hdfs-bolt";
     public static final String COMPUTE_BOLT_ID = "compute-bolt";
     public static final String REPORT_BOLT_IT= "report-bolt";
     public static final String TOPOLOGY_NAME= "hdfs-benchMark-topology";
 
     public static void main(String[] args) throws InvalidTopologyException, AuthorizationException, AlreadyAliveException {
+
+        String hdfsUri = "hdfs://root2:9000";
         HdfsSpout hdfsSpout=new HdfsSpout().withOutputFields("word");
 
         HdfsComputeBolt computeBolt=new HdfsComputeBolt();
         HdfsReportBolt reportBolt=new HdfsReportBolt();
 
+        /*
+        // Configure HDFS bolt
+        RecordFormat format = new DelimitedRecordFormat()
+                .withFieldDelimiter("\t"); // use "\t" instead of "," for field delimiter
+        SyncPolicy syncPolicy = new CountSyncPolicy(1000); // sync the filesystem after every 1k tuples
+        FileRotationPolicy rotationPolicy = new TimedRotationPolicy(1.0f, TimedRotationPolicy.TimeUnit.MINUTES); // rotate files
+        FileNameFormat fileNameFormat = new DefaultFileNameFormat()
+                .withPath("/storm/").withPrefix("app_").withExtension(".log"); // set file name format
+        HdfsBolt hdfsBolt = new HdfsBolt()
+                .withFsUrl(hdfsUri)
+                .withFileNameFormat(fileNameFormat)
+                .withRecordFormat(format)
+                .withRotationPolicy(rotationPolicy)
+                .withSyncPolicy(syncPolicy);
+*/
         TopologyBuilder builder=new TopologyBuilder();
 
         Integer numworkers=Integer.valueOf(args[1]);
@@ -37,7 +55,6 @@ public class HdfsBenchMarkTopology {
         Integer computeboltparallelism=Integer.valueOf(args[3]);
 
         // 1 - parse cmd line args
-        String hdfsUri = "hdfs://root2:9000";
         String fileFormat = "TEXT";
         String sourceDir = args[4];
         String sourceArchiveDir = args[5];
@@ -51,6 +68,10 @@ public class HdfsBenchMarkTopology {
 
         builder.setBolt(REPORT_BOLT_IT,reportBolt)
                 .globalGrouping(COMPUTE_BOLT_ID);
+/*
+        builder.setBolt(HDFS_BOLT_ID,hdfsBolt,2)
+                .shuffleGrouping(COMPUTE_BOLT_ID);
+*/
 
         //Topology配置
         Config config=new Config();
