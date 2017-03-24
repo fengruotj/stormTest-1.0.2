@@ -18,7 +18,7 @@ import java.util.Arrays;
 
 /**
  * Created by 79875 on 2017/3/3.
- * storm jar stormTest-1.0.2-SNAPSHOT-jar-with-dependencies.jar com.basic.storm.topology.KafkaWordCountTopology tweetswordtopic3 12 18 10 10
+ * storm jar stormTest-1.0.2-SNAPSHOT.jar com.basic.storm.topology.KafkaWordCountTopology tweetswordtopic3 12 18 10
  */
 public class KafkaWordCountTopology {
     public static final String KAFKA_SPOUT_ID ="kafka-spout";
@@ -41,7 +41,6 @@ public class KafkaWordCountTopology {
         Integer numworkers=Integer.valueOf(args[1]);
         Integer spoutparallelism=Integer.valueOf(args[2]);
         Integer countboltparallelism=Integer.valueOf(args[3]);
-        Integer reportparallelism=Integer.valueOf(args[4]);
 
         BrokerHosts brokerHosts = new ZkHosts(zks,"/kafka/brokers");
         SpoutConfig spoutConf = new SpoutConfig(brokerHosts, topic, zkRoot, id);
@@ -58,7 +57,7 @@ public class KafkaWordCountTopology {
         builder.setSpout(KAFKA_SPOUT_ID, kafkaSpout, spoutparallelism); // Kafka我们创建了一个6分区的Topic，这里并行度设置为6
         //builder.setBolt(KAFFKA_BOLT_ID, new KaffkaBolt(), kaffkaboltparallelism).shuffleGrouping(SENTENCE_SPOUT_ID);
         builder.setBolt(COUNT_BOLT_ID, new KafkaWordCountBolt(), countboltparallelism).fieldsGrouping(KAFKA_SPOUT_ID,new Fields("str"));
-        builder.setBolt(REPORT_BOLT_IT, new ReportBolt(),reportparallelism)
+        builder.setBolt(REPORT_BOLT_IT, new ReportBolt())
                 .shuffleGrouping(COUNT_BOLT_ID,WORDCOUNT_STREAM_ID);
         builder.setBolt(WORDCOUNT_REPORT_BOLT_ID,wordCountReportBolt)
                 .allGrouping(COUNT_BOLT_ID,TUPLECOUNT_STREAM_ID);

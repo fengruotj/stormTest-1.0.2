@@ -15,7 +15,7 @@ import org.apache.storm.utils.Utils;
 
 /**
  * Created by 79875 on 2017/3/19.
- * 提交stormtopology任务 storm jar stormTest-1.0.2-SNAPSHOT.jar com.basic.storm.topology.HdfsBenchMarkTopology hdfsbenchmark 1 1 1 /benchmarks/TestDFSIO/io_data /user/root/output /user/root/baddir
+ * 提交stormtopology任务 storm jar stormTest-1.0.2-SNAPSHOT.jar com.basic.storm.topology.HdfsBenchMarkTopology hdfsbenchmark 8 8 8 /benchmarks/TestDFSIO/io_data /user/root/output /user/root/baddir
  */
 public class HdfsBenchMarkTopology {
 

@@ -17,7 +17,7 @@ import org.apache.storm.utils.Utils;
 
 /**
  * Created by dello on 2016/10/15.
- * 提交stormtopology任务 storm jar stormTest-1.0.2-SNAPSHOT-jar-with-dependencies.jar com.basic.storm.topology.SocketWordCountTopology stormwordcount 5 5 10 1
+ * 提交stormtopology任务 storm jar stormTest-1.0.2-SNAPSHOT.jar com.basic.storm.topology.SocketWordCountTopology stormwordcount 5 5 10
  */
 public class SocketWordCountTopology {
     public static final String SOCKET_SPOUT_ID ="socket-spout";
@@ -26,7 +26,7 @@ public class SocketWordCountTopology {
     public static final String REPORT_BOLT_ID= "report-bolt";
     public static final String SPOUT_REPORT_BOLT_ID= "spout-report-bolt";
     public static final String WORDCOUNT_REPORT_BOLT_ID= "wordcount-report-bolt";
-    public static final String TOPOLOGY_NAME= "word-count-topology";
+    public static final String TOPOLOGY_NAME= "socket-wordcount-topology";
     public static final String WORDCOUNT_STREAM_ID="wordcountstream";
     public static final String TUPLECOUNT_STREAM_ID="tuplecountstream";
 
@@ -42,7 +42,6 @@ public class SocketWordCountTopology {
         Integer numworkers=Integer.valueOf(args[1]);
         Integer spoutparallelism=Integer.valueOf(args[2]);
         Integer wordcountboltparallelism=Integer.valueOf(args[3]);
-        Integer reportboltparallelism=Integer.valueOf(args[4]);
 
         builder.setSpout(SOCKET_SPOUT_ID,spout,spoutparallelism);//10 spout并发数
 //        builder.setBolt(SPLIT_BOLT_ID,splitSentencesBolt,20)//splitSentencesBolt并发数
@@ -51,7 +50,7 @@ public class SocketWordCountTopology {
         builder.setBolt(COUNT_BOLT_ID,wordCountBolt,wordcountboltparallelism)//1
                 .fieldsGrouping(SOCKET_SPOUT_ID,WORDCOUNT_STREAM_ID,new Fields("word"));
 
-        builder.setBolt(REPORT_BOLT_ID,reportBolt,reportboltparallelism)
+        builder.setBolt(REPORT_BOLT_ID,reportBolt)
                 .allGrouping(COUNT_BOLT_ID,WORDCOUNT_STREAM_ID);
         builder.setBolt(SPOUT_REPORT_BOLT_ID,spoutReportBolt)
                 .allGrouping(SOCKET_SPOUT_ID,TUPLECOUNT_STREAM_ID);

@@ -17,7 +17,7 @@ import org.apache.storm.utils.Utils;
 
 /**
  * Created by 79875 on 2017/3/7.
- * 提交stormtopology任务 storm jar stormTest-1.0.2-SNAPSHOT-jar-with-dependencies.jar com.basic.storm.topology.SentenceWordCountTopology stormwordcount 10 10 10 1
+ * 提交stormtopology任务 storm jar stormTest-1.0.2-SNAPSHOT.jar com.basic.storm.topology.SentenceWordCountTopology stormwordcount 10 10 10
  */
 public class SentenceWordCountTopology {
     public static final String SENTENCE_SPOUT_ID ="sentence-spout";
@@ -42,7 +42,6 @@ public class SentenceWordCountTopology {
         Integer numworkers=Integer.valueOf(args[1]);
         Integer spoutparallelism=Integer.valueOf(args[2]);
         Integer wordcountboltparallelism=Integer.valueOf(args[3]);
-        Integer reportboltparallelism=Integer.valueOf(args[4]);
 
         builder.setSpout(SENTENCE_SPOUT_ID,spout,spoutparallelism);//10 spout并发数
 //        builder.setBolt(SPLIT_BOLT_ID,splitSentencesBolt,20)//splitSentencesBolt并发数
@@ -51,7 +50,7 @@ public class SentenceWordCountTopology {
         builder.setBolt(COUNT_BOLT_ID,wordCountBolt,wordcountboltparallelism)//1
                 .fieldsGrouping(SENTENCE_SPOUT_ID,WORDCOUNT_STREAM_ID,new Fields("word"));
 
-        builder.setBolt(REPORT_BOLT_ID,reportBolt,reportboltparallelism)
+        builder.setBolt(REPORT_BOLT_ID,reportBolt,1)
                 .shuffleGrouping(COUNT_BOLT_ID,WORDCOUNT_STREAM_ID);
         builder.setBolt(SPOUT_REPORT_BOLT_ID,spoutReportBolt)
                 .allGrouping(SENTENCE_SPOUT_ID,TUPLECOUNT_STREAM_ID);
