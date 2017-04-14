@@ -18,7 +18,7 @@ import java.util.Arrays;
 
 /**
  * Created by 79875 on 2017/3/3.
- * storm jar stormTest-1.0.2-SNAPSHOT.jar com.basic.storm.topology.KafkaWordCountTopology tweetswordtopic3 12 18 10
+ * storm jar stormTest-1.0.2-SNAPSHOT.jar com.basic.storm.topology.KafkaWordCountTopology data_300000000_100 stormkafka 12 18 10
  */
 public class KafkaWordCountTopology {
     public static final String KAFKA_SPOUT_ID ="kafka-spout";
@@ -34,13 +34,13 @@ public class KafkaWordCountTopology {
 //        String topic = "tweetsword2";
         String topic= args[0];
         String zkRoot = "/storm"; // default zookeeper root configuration for storm
-        String id = "stormKafka";//设置消费者的ID
+        String id = args[1];//设置消费者的ID
 
         WordCountReportBolt wordCountReportBolt=new WordCountReportBolt();
 
-        Integer numworkers=Integer.valueOf(args[1]);
-        Integer spoutparallelism=Integer.valueOf(args[2]);
-        Integer countboltparallelism=Integer.valueOf(args[3]);
+        Integer numworkers=Integer.valueOf(args[2]);
+        Integer spoutparallelism=Integer.valueOf(args[3]);
+        Integer countboltparallelism=Integer.valueOf(args[4]);
 
         BrokerHosts brokerHosts = new ZkHosts(zks,"/kafka/brokers");
         SpoutConfig spoutConf = new SpoutConfig(brokerHosts, topic, zkRoot, id);
@@ -50,13 +50,16 @@ public class KafkaWordCountTopology {
         spoutConf.zkPort = 2181;
         //      spoutConf.startOffsetTime = kafka.api.OffsetRequest.LatestTime();//从最新消息的开始读取
         spoutConf.startOffsetTime = kafka.api.OffsetRequest.EarliestTime();//从最旧的消息开始读取
+
         System.out.println("kafkaspout outputFields num1: "+spoutConf.scheme.getOutputFields().get(0));
         KafkaSpout kafkaSpout=new KafkaSpout(spoutConf);
 
         TopologyBuilder builder = new TopologyBuilder();
         builder.setSpout(KAFKA_SPOUT_ID, kafkaSpout, spoutparallelism); // Kafka我们创建了一个6分区的Topic，这里并行度设置为6
         //builder.setBolt(KAFFKA_BOLT_ID, new KaffkaBolt(), kaffkaboltparallelism).shuffleGrouping(SENTENCE_SPOUT_ID);
-        builder.setBolt(COUNT_BOLT_ID, new KafkaWordCountBolt(), countboltparallelism).fieldsGrouping(KAFKA_SPOUT_ID,new Fields("str"));
+        builder.setBolt(COUNT_BOLT_ID, new KafkaWordCountBolt(), countboltparallelism)
+                .fieldsGrouping(KAFKA_SPOUT_ID,new Fields("str"));
+                //.shuffleGrouping(KAFKA_SPOUT_ID);
         builder.setBolt(REPORT_BOLT_IT, new ReportBolt())
                 .shuffleGrouping(COUNT_BOLT_ID,WORDCOUNT_STREAM_ID);
         builder.setBolt(WORDCOUNT_REPORT_BOLT_ID,wordCountReportBolt)

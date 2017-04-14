@@ -17,7 +17,7 @@ import org.apache.storm.utils.Utils;
 
 /**
  * Created by 79875 on 2017/3/18.
- * 提交stormtopology任务 storm jar stormTest-1.0.2-SNAPSHOT.jar com.basic.storm.topology.HdfsWordCountTopology hdfswordcount 8 8 16 1 /user/root/input /user/root/output /user/root/baddir
+ * 提交stormtopology任务 storm jar stormTest-1.0.2-SNAPSHOT.jar com.basic.storm.topology.HdfsWordCountTopology hdfswordcount 8 8 16 1 /user/root/wordcount/input/data_300000000_100 /user/root/wordcount/output /user/root/baddi
  */
 public class HdfsWordCountTopology {
     public static final String HDFS_SPOUT_ID ="hdfs-spout";
@@ -55,7 +55,7 @@ public class HdfsWordCountTopology {
 //                .shuffleGrouping(SENTENCE_SPOUT_ID);
         builder.setBolt(COUNT_BOLT_ID,wordCountBolt,wordcountboltparallelism)//1
                 .fieldsGrouping(HDFS_SPOUT_ID,new Fields("word"));
-
+                //.shuffleGrouping(HDFS_SPOUT_ID);
         builder.setBolt(REPORT_BOLT_IT,reportBolt,reportboltparallelism)
                 .shuffleGrouping(COUNT_BOLT_ID,WORDCOUNT_STREAM_ID);
         builder.setBolt(WORDCOUNT_REPORT_BOLT_ID,wordCountReportBolt)

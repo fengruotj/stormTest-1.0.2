@@ -49,6 +49,7 @@ public class SocketWordCountTopology {
 //                .shuffleGrouping(SENTENCE_SPOUT_ID);
         builder.setBolt(COUNT_BOLT_ID,wordCountBolt,wordcountboltparallelism)//1
                 .fieldsGrouping(SOCKET_SPOUT_ID,WORDCOUNT_STREAM_ID,new Fields("word"));
+                //.shuffleGrouping(SOCKET_SPOUT_ID,WORDCOUNT_STREAM_ID);
 
         builder.setBolt(REPORT_BOLT_ID,reportBolt)
                 .allGrouping(COUNT_BOLT_ID,WORDCOUNT_STREAM_ID);

@@ -81,25 +81,27 @@ public class SocketSentenceSpout  extends BaseRichSpout {
     public void nextTuple() {
 
         String word = null;
-        try {
-            if(in!=null)
-                word = in.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        while(true) {
+            try {
+                if (in != null)
+                    word = in.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-        //如果word不等于空并且word不是""就执行发送逻辑
-        if(word!=null && !word.equals("")){
-            long currentTimemills=System.currentTimeMillis();//为了统计处理延迟
-            outputCollector.emit(WORDCOUNT_STREAM_ID,new Values(word,currentTimemills));
-            spoutcount++;
-        }
+            //如果word不等于空并且word不是""就执行发送逻辑
+            if (word != null && !word.equals("")) {
+                long currentTimemills = System.currentTimeMillis();//为了统计处理延迟
+                outputCollector.emit(WORDCOUNT_STREAM_ID, new Values(word, currentTimemills));
+                spoutcount++;
+            }
 
-        //将输出结果发送给下游SpoutReport输出
-        if(!resultQueue.isEmpty()){
-            SpoutResult poll = resultQueue.poll();
-            if(poll!=null)
-                outputCollector.emit(TUPLECOUNT_STREAM_ID,new Values(poll.getSpoutcount(),poll.getSystemMills()));
+            //将输出结果发送给下游SpoutReport输出
+            if (!resultQueue.isEmpty()) {
+                SpoutResult poll = resultQueue.poll();
+                if (poll != null)
+                    outputCollector.emit(TUPLECOUNT_STREAM_ID, new Values(poll.getSpoutcount(), poll.getSystemMills()));
+            }
         }
     }
 }
