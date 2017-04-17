@@ -1,4 +1,4 @@
-package com.basic.storm.util;
+package com.basic.util;
 
 /**
  * Created by 79875 on 2017/1/13.

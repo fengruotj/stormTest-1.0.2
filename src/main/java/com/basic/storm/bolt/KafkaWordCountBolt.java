@@ -1,7 +1,7 @@
 package com.basic.storm.bolt;
 
 import com.basic.storm.model.WordCountResult;
-import com.basic.storm.util.DataBaseUtil;
+import com.basic.util.DataBaseUtil;
 import org.apache.storm.task.OutputCollector;
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.OutputFieldsDeclarer;

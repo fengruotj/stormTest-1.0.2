@@ -1,6 +1,6 @@
 package com.basic.kafka.producer;
 
-import com.basic.storm.util.PropertiesUtil;
+import com.basic.util.PropertiesUtil;
 import kafka.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;

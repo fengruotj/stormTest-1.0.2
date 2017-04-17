@@ -1,7 +1,7 @@
 package com.basic.storm.spot;
 
 import com.basic.storm.model.SpoutResult;
-import com.basic.storm.util.PropertiesUtil;
+import com.basic.util.PropertiesUtil;
 import org.apache.storm.shade.org.jboss.netty.util.internal.ConcurrentHashMap;
 import org.apache.storm.spout.SpoutOutputCollector;
 import org.apache.storm.task.TopologyContext;

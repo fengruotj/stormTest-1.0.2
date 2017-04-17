@@ -1,4 +1,4 @@
-package com.basic.storm.util;
+package com.basic.util;
 
 import java.io.InputStream;
 import java.util.Properties;

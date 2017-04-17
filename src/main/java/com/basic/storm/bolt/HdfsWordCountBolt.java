@@ -1,7 +1,7 @@
 package com.basic.storm.bolt;
 
 import com.basic.storm.model.WordCountResult;
-import com.basic.storm.util.DataBaseUtil;
+import com.basic.util.DataBaseUtil;
 import org.apache.storm.task.OutputCollector;
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.OutputFieldsDeclarer;
@@ -18,9 +18,9 @@ import java.util.*;
 /**
  * Created by 79875 on 2017/3/18.
  */
-public class HdfsWordCount  extends BaseRichBolt {
+public class HdfsWordCountBolt extends BaseRichBolt {
 
-    private static Logger logger= LoggerFactory.getLogger(HdfsWordCount.class);
+    private static Logger logger= LoggerFactory.getLogger(HdfsWordCountBolt.class);
 
     public static final String WORDCOUNT_STREAM_ID="wordcountstream";
     public static final String TUPLECOUNT_STREAM_ID="tuplecountstream";
@@ -81,7 +81,7 @@ public class HdfsWordCount  extends BaseRichBolt {
             WordCountResult poll = resultQueue.poll();
             if(poll!=null){
                 outputCollector.emit(TUPLECOUNT_STREAM_ID,new Values(poll.getTupplecount(),poll.getSystemMills()));
-                logger.info("------------ KafkaWordCountBolt emit tupplecountstream------------"+" time:"+poll.getSystemMills()+" tupplecount:"+poll.getTupplecount());
+                logger.info("------------ HDFSWordCountBolt emit tupplecountstream------------"+" time:"+poll.getSystemMills()+" tupplecount:"+poll.getTupplecount());
             }
 
         }

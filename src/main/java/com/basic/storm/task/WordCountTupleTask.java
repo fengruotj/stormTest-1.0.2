@@ -1,6 +1,6 @@
 package com.basic.storm.task;
 
-import com.basic.storm.util.DataBaseUtil;
+import com.basic.util.DataBaseUtil;
 
 import java.sql.Timestamp;
 
