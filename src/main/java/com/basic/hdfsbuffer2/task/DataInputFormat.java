@@ -19,6 +19,23 @@ public class DataInputFormat {
     private HdfsOperationUtil hdfsOperationUtil=new HdfsOperationUtil();
     private Logger LOG = Logger.getLogger(DataInputFormat.class);
 
+    private Long blockSize=null;
+
+    public DataInputFormat(Long blockSize) {
+        this.blockSize = blockSize;
+    }
+
+    public DataInputFormat() {
+    }
+
+    public Long getBlockSize() {
+        return blockSize;
+    }
+
+    public void setBlockSize(Long blockSize) {
+        this.blockSize = blockSize;
+    }
+
     public List<InputSplit> getSplits(String inputpath) throws IOException {
 
         ArrayList splits = new ArrayList();
@@ -39,9 +56,9 @@ public class DataInputFormat {
                             FileSystem blockSize = path.getFileSystem(HdfsOperationUtil.getConf());
                             blkLocations = blockSize.getFileBlockLocations(file, 0L, length);
                         }
-
-                        long blockSize1 = file.getBlockSize();
-                        long splitSize = blockSize1;
+                        if(blockSize==null)
+                            blockSize = file.getBlockSize();
+                        long splitSize = blockSize;
 
                         long bytesRemaining;
                         int blkIndex;

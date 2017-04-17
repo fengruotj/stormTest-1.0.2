@@ -82,7 +82,7 @@ public class DataBaseUtil {
             preparedStatement.setLong(2,tuplecount);
             int count = preparedStatement.executeUpdate();  // 执行插入操作的sql语句，并返回插入数据的个数
             preparedStatement.close();
-            logger.info("insert into t_tuplecount (time,tuplecount) values"+time+" "+tuplecount);
+            //logger.info("insert into t_tuplecount (time,tuplecount) values"+time+" "+tuplecount);
         }catch (SQLException e){
             e.printStackTrace();
         }
@@ -103,7 +103,7 @@ public class DataBaseUtil {
             preparedStatement.setLong(2,tuplecount);
             int count = preparedStatement.executeUpdate();  // 执行插入操作的sql语句，并返回插入数据的个数
             preparedStatement.close();
-            logger.info("insert into t_spouttuplecount (time,tuplecount) values"+time+" "+tuplecount);
+            //logger.info("insert into t_spouttuplecount (time,tuplecount) values"+time+" "+tuplecount);
         }catch (SQLException e){
             e.printStackTrace();
         }
@@ -124,7 +124,7 @@ public class DataBaseUtil {
             preparedStatement.setLong(2,bytecount);
             int count = preparedStatement.executeUpdate();  // 执行插入操作的sql语句，并返回插入数据的个数
             preparedStatement.close();
-            logger.info("insert into t_hdfsbytecount (time,bytecount) values"+time+" "+bytecount);
+            //logger.info("insert into t_hdfsbytecount (time,bytecount) values"+time+" "+bytecount);
         }catch (SQLException e){
             e.printStackTrace();
         }
@@ -145,7 +145,7 @@ public class DataBaseUtil {
             preparedStatement.setLong(2,latency);
             int count = preparedStatement.executeUpdate();  // 执行插入操作的sql语句，并返回插入数据的个数
             preparedStatement.close();
-            logger.info("insert into t_tuplelatency (time,tuplecount) values"+time+" "+latency);
+            //logger.info("insert into t_tuplelatency (time,tuplecount) values"+time+" "+latency);
         }catch (SQLException e){
             e.printStackTrace();
         }
@@ -168,7 +168,7 @@ public class DataBaseUtil {
             preparedStatement.setLong(3,count);
             int num = preparedStatement.executeUpdate();  // 执行插入操作的sql语句，并返回插入数据的个数
             preparedStatement.close();
-            logger.info("insert into t_wordcount (time,word,count) values"+time+" "+word+" "+count);
+            //logger.info("insert into t_wordcount (time,word,count) values"+time+" "+word+" "+count);
         }catch (SQLException e){
             e.printStackTrace();
         }

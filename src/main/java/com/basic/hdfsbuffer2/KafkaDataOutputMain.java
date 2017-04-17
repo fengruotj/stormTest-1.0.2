@@ -49,7 +49,7 @@ public class KafkaDataOutputMain {
         hdfsCachePool.runHDFSCachePool();
         int kafkaPartitionsNum=6;
         dataOutputKafka=new DataOutputKafka(hdfsCachePool,kafkaPartitionsNum);
-        dataOutputKafka.datoutputKafka("abc");
+        dataOutputKafka.datoutputKafka("testTopic");
 
         long endTimeSystemTime = System.currentTimeMillis();
         LOG.info("startTime:"+new Timestamp(startTimeSystemTime));

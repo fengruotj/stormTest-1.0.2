@@ -87,7 +87,7 @@ public class HdfsBenchMarkTopology {
         config.put(Configs.READER_TYPE, fileFormat);
         config.put(Configs.HDFS_URI, hdfsUri);
 
-        config.setDebug(true);
+        //config.setDebug(true); 显示debug 信息由于打印每个tuple的内容会显著降低 吞吐量。吞吐量大致为7000左右
 
         if(args[0].equals("local")){
             LocalCluster localCluster=new LocalCluster();

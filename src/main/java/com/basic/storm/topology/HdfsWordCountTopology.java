@@ -19,7 +19,7 @@ import java.io.IOException;
 
 /**
  * Created by 79875 on 2017/3/18.
- * 提交stormtopology任务 storm jar stormTest-1.0.2-SNAPSHOT.jar com.basic.storm.topology.HdfsWordCountTopology hdfswordcount 8 8 16 1 /user/root/wordcount/input/data_300000000_100 /user/root/wordcount/output /user/root/baddi
+ * 提交stormtopology任务 storm jar stormTest-1.0.2-SNAPSHOT.jar com.basic.storm.topology.HdfsWordCountTopology hdfswordcount 8 8 16 1 /user/root/wordcount/input/data_300000000_100 /user/root/wordcount/output /user/root/baddir
  */
 public class HdfsWordCountTopology {
     public static final String HDFS_SPOUT_ID ="hdfs-spout";
@@ -76,7 +76,7 @@ public class HdfsWordCountTopology {
         config.put(Configs.READER_TYPE, fileFormat);
         config.put(Configs.HDFS_URI, hdfsUri);
 
-        config.setDebug(true);
+        //config.setDebug(true); 显示debug 信息由于打印每个tuple的内容会显著降低 吞吐量。吞吐量大致为7000左右
 
         if(args[0].equals("local")){
             LocalCluster localCluster=new LocalCluster();

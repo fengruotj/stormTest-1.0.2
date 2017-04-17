@@ -6,7 +6,6 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.mapreduce.InputSplit;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +16,11 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by 79875 on 2017/4/1.'
  */
-public class  HdfsCachePool implements Serializable{
+public class  HdfsCachePool {
     private static final Log LOG = LogFactory.getLog(HdfsCachePool.class);
     private static HdfsCachePool instance;//缓存池唯一实例
 
-    private ByteBuffer[] bufferArray;
+    private HDFSBuffer[] bufferArray;
 
     private int bufferNum = 10;
 
@@ -49,7 +48,10 @@ public class  HdfsCachePool implements Serializable{
     public HdfsCachePool(int bufferNum, List<InputSplit> inputSplitList) throws IOException, InterruptedException {
         this.bufferNum = bufferNum;
         this.inputSplitList = inputSplitList;
-        bufferArray = new ByteBuffer[bufferNum];
+        bufferArray = new HDFSBuffer[bufferNum];
+        for(int i=0;i<bufferNum;i++){
+            bufferArray[i]=new HDFSBuffer();
+        }
     }
 
     /**
@@ -62,13 +64,16 @@ public class  HdfsCachePool implements Serializable{
     public void init(List<InputSplit> inputSplitList) throws IOException, InterruptedException {
 //        if(bufferArray!=null)//如果缓冲数组不为空则首先清除缓冲区
 //            clearBufferArray();
+        for(int i=0;i<bufferNum;i++){
+            bufferArray[i]=new HDFSBuffer();
+        }
         for (int i = 0; i < bufferNum; i++) {
-            bufferArray[i] = ByteBuffer.allocate((int) inputSplitList.get(i).getLength());//创建一个128M大小的字节缓存区
+            bufferArray[i].byteBuffer = ByteBuffer.allocate((int) inputSplitList.get(i).getLength());//创建一个128M大小的字节缓存区
         }
     }
 
-    public void setInstance(int bufferindexm, InputSplit inputSplit) throws IOException, InterruptedException {
-        bufferArray[bufferindexm] = ByteBuffer.allocate((int) inputSplit.getLength());
+    public void setInstance(int bufferindex, InputSplit inputSplit) throws IOException, InterruptedException {
+        bufferArray[bufferindex].byteBuffer = ByteBuffer.allocate((int) inputSplit.getLength());
     }
 
 
@@ -102,7 +107,7 @@ public class  HdfsCachePool implements Serializable{
         executor.execute(dataInputTask);
     }
 
-    public ByteBuffer[] getBufferArray() {
+    public HDFSBuffer[] getBufferArray() {
         return bufferArray;
     }
 
@@ -115,7 +120,7 @@ public class  HdfsCachePool implements Serializable{
      */
     public void clearBufferArray() {
         for (int i = 0; i < bufferArray.length; i++) {
-            bufferArray[i].clear();
+            bufferArray[i].byteBuffer.clear();
         }
     }
 
@@ -143,17 +148,25 @@ public class  HdfsCachePool implements Serializable{
     }
 
     /**
-     * 是否buuferBlock缓存输出完毕
-     * @param blocknum
+     * 是否buferBlock缓存输出完毕
+     * @param blocknum blocknum下标
      * @return
      */
     public boolean isBufferBlockoutFinished(int blocknum){
-        ByteBuffer byteBuffer = bufferArray[blocknum];
+        ByteBuffer byteBuffer = bufferArray[blocknum].byteBuffer;
         if(byteBuffer.hasRemaining())
             return false;
         else return true;
     }
 
+    /**
+     *  是否buferBlock缓存完毕
+     * @param blocknum blocknum下标
+     * @return
+     */
+    public boolean isBufferBlockFinished(int blocknum){
+        return bufferArray[blocknum].isBufferFinished();
+    }
 
     public List<InputSplit> getInputSplitList() {
         return inputSplitList;

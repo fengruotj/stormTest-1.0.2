@@ -1,5 +1,6 @@
 package com.basic.hdfsbuffer2.task;
 
+import com.basic.hdfsbuffer2.model.HDFSBuffer;
 import com.basic.util.HdfsOperationUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -32,7 +33,7 @@ public class DataInputTask implements Runnable {
     private Decompressor decompressor;
     private byte[] recordDelimiterBytes;
 
-    private ByteBuffer byteBuffer;
+    private HDFSBuffer hdfsBuffer;
 
     private HdfsOperationUtil hdfsOperationUtil=new HdfsOperationUtil();
 
@@ -42,8 +43,8 @@ public class DataInputTask implements Runnable {
 
     private int block_num;
 
-    public DataInputTask(ByteBuffer byteBuffer, InputSplit inputSplit, int block_num) throws IOException {
-        this.byteBuffer = byteBuffer;
+    public DataInputTask(HDFSBuffer hdfsBuffer, InputSplit inputSplit, int block_num) throws IOException {
+        this.hdfsBuffer = hdfsBuffer;
         this.fileSplit= (FileSplit) inputSplit;
         this.block_num=block_num;
         fileSystem=HdfsOperationUtil.getFs();
@@ -83,6 +84,7 @@ public class DataInputTask implements Runnable {
 
     @Override
     public void run() {
+        ByteBuffer byteBuffer=hdfsBuffer.byteBuffer;
         try {
             initialize(this.fileSplit);
 
@@ -100,10 +102,12 @@ public class DataInputTask implements Runnable {
             System.out.println("DataInputTask: "+byteBuffer+" block_num: "+block_num);
             byteBuffer.clear();
             System.gc();
+            hdfsBuffer.setBufferFinished(true);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
+
     }
 }

@@ -7,6 +7,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.io.Text;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 /**
  * locate com.basic.hdfsbuffer2
@@ -33,13 +34,17 @@ public class DataOutputKafka {
 
     public void datoutputKafka(String kafkatopic) throws IOException, InterruptedException {
         while (true){
-            if(hdfsCachePool.isIsbufferfinish()){
+            //if(hdfsCachePool.isIsbufferfinish()){
                 //可以开始读取HdfsCachePool
                 int activeBufferNum = hdfsCachePool.getActiveBufferNum();
                 for(int i=0;i<activeBufferNum;i++){
-                    BufferLineReader bufferLineReader=new BufferLineReader(hdfsCachePool.getBufferArray()[i]);
+                    while (!hdfsCachePool.isBufferBlockFinished(i)){
+                        Thread.sleep(100);
+                    }
+                    ByteBuffer byteBuffer = hdfsCachePool.getBufferArray()[i].byteBuffer;
+                    BufferLineReader bufferLineReader=new BufferLineReader(byteBuffer);
                     Text text=new Text();
-                    System.out.println("-----------------"+ hdfsCachePool.getBufferArray()[i] +" num:"+i+" blockPosition: "+blockPosition);
+                    System.out.println("-----------------"+ byteBuffer +" num:"+i+" blockPosition: "+blockPosition);
                     long startTimeSystemTime= System.currentTimeMillis();
                     while (bufferLineReader.readLine(text)!=0){
                         Totalrows++;
@@ -61,5 +66,5 @@ public class DataOutputKafka {
             }
             Thread.sleep(100);
         }
-    }
+    //}
 }
