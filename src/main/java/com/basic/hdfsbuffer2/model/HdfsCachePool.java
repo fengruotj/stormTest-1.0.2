@@ -73,6 +73,7 @@ public class  HdfsCachePool {
     }
 
     public void setInstance(int bufferindex, InputSplit inputSplit) throws IOException, InterruptedException {
+        bufferArray[bufferindex].setBufferFinished(false);
         bufferArray[bufferindex].byteBuffer = ByteBuffer.allocate((int) inputSplit.getLength());
     }
 

@@ -19,7 +19,7 @@ import java.io.IOException;
 /**
  * locate com.basic.storm.topology
  * Created by 79875 on 2017/4/17.
- * 提交stormtopology任务 storm jar stormTest-1.0.2-SNAPSHOT.jar com.basic.storm.topology.HDFSBufferWordCountTopology hdfswordcount 8 16 /user/root/wordcount/input/data_300000000_100
+ * 提交stormtopology任务 storm jar stormTest-1.0.2-SNAPSHOT.jar com.basic.storm.topology.HDFSBufferWordCountTopology hdfswordcount 8 16 /user/root/flinkwordcount/input/resultTweets.txt
  */
 public class HDFSBufferWordCountTopology {
     public static final String HDFS_SPOUT_ID ="hdfs-buffer-spout";
@@ -49,7 +49,7 @@ public class HDFSBufferWordCountTopology {
 //                .shuffleGrouping(SENTENCE_SPOUT_ID);
         builder.setBolt(COUNT_BOLT_ID,wordCountBolt,wordcountboltparallelism)//1
                 .fieldsGrouping(HDFS_SPOUT_ID,new Fields("word"));
-        //.shuffleGrouping(HDFS_SPOUT_ID);
+                //.shuffleGrouping(HDFS_SPOUT_ID);
         builder.setBolt(REPORT_BOLT_IT,reportBolt)
                 .shuffleGrouping(COUNT_BOLT_ID,WORDCOUNT_STREAM_ID);
         builder.setBolt(WORDCOUNT_REPORT_BOLT_ID,wordCountReportBolt)

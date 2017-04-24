@@ -103,6 +103,7 @@ public class DataInputTask implements Runnable {
             byteBuffer.clear();
             System.gc();
             hdfsBuffer.setBufferFinished(true);
+
         } catch (IOException e) {
             e.printStackTrace();
         } catch (Throwable throwable) {

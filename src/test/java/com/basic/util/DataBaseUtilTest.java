@@ -29,4 +29,10 @@ public class DataBaseUtilTest {
 //        DataBaseUtil.getConnection();
 //        DataBaseUtil.insertSpoutTupleCount(new Timestamp(System.currentTimeMillis()),1256L);
     }
+
+    @Test
+    public void test(){
+//        List<String> list =  Collections.singletonList("One");
+//        System.out.println(list);
+    }
 }
