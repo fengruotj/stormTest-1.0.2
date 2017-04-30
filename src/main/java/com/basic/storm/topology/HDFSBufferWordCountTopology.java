@@ -3,7 +3,7 @@ package com.basic.storm.topology;
 import com.basic.storm.bolt.HdfsWordCountBolt;
 import com.basic.storm.bolt.report.ReportBolt;
 import com.basic.storm.bolt.report.WordCountReportBolt;
-import com.basic.storm.spot.HDFSBufferSpout;
+import com.hdfsbuffer.spout.HDFSBufferSpout;
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
 import org.apache.storm.StormSubmitter;
