@@ -19,7 +19,7 @@ import java.io.IOException;
 /**
  * locate com.basic.storm.topology
  * Created by 79875 on 2017/4/17.
- * 提交stormtopology任务 storm jar stormTest-1.0.2-SNAPSHOT.jar com.basic.storm.topology.HDFSBufferWordCountTopology hdfswordcount 8 16 /user/root/flinkwordcount/input/resultTweets.txt
+ * 提交stormtopology任务 storm jar stormTest-1.0.2-SNAPSHOT.jar com.basic.storm.topology.HDFSBufferWordCountTopology hdfswordcount 8 16 /user/root/flinkwordcount/input/resultTweets.txt 64
  */
 public class HDFSBufferWordCountTopology {
     public static final String HDFS_SPOUT_ID ="hdfs-buffer-spout";
@@ -33,7 +33,7 @@ public class HDFSBufferWordCountTopology {
     public static void main(String[] args) throws IOException, InterruptedException, InvalidTopologyException, AuthorizationException, AlreadyAliveException {
 
         HDFSBufferSpout hdfsBufferSpout= new HDFSBufferSpout(10,args[3]).withOutputFields("word");
-
+        hdfsBufferSpout.setBufferSize(Long.valueOf(args[4])*1024*1024);
         HdfsWordCountBolt wordCountBolt=new HdfsWordCountBolt();
         ReportBolt reportBolt=new ReportBolt();
         WordCountReportBolt wordCountReportBolt=new WordCountReportBolt();
