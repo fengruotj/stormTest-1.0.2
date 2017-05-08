@@ -17,7 +17,7 @@ import org.apache.storm.utils.Utils;
 
 /**
  * Created by dello on 2016/10/15.
- * 提交stormtopology任务 storm jar stormTest-1.0.1-SNAPSHOT-jar-with-dependencies.jar com.basic.storm.topology.WordCountTopology stormwordcount 5 5 10 1
+ * 提交stormtopology任务 storm jar stormTest-1.0.2-SNAPSHOT.jar com.basic.storm.topology.WordCountTopology stormwordcount 5 5 10 1
  */
 public class WordCountTopology {
     public static final String SENTENCE_SPOUT_ID ="sentence-spout";
