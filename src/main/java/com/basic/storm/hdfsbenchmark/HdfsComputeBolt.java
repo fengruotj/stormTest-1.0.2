@@ -32,7 +32,6 @@ public class HdfsComputeBolt extends BaseRichBolt {
     private OutputCollector outputCollector;
     private long delaystartTimemills;//处理逻辑起始时间 用来统计延迟
     private long delayendTimemills;//处理逻辑结束时间  用来统计延迟
-
     static {
         timer=new Timer();
 
@@ -60,7 +59,8 @@ public class HdfsComputeBolt extends BaseRichBolt {
     public void execute(Tuple tuple) {
         //将数据写入文件
         String word = tuple.getStringByField("word");
-        int length = word.getBytes().length;
+        //int length = word.getBytes().length;
+        int length = 1;
         bytecount=bytecount+length;
         allbytecount=allbytecount+length;
 
@@ -68,11 +68,11 @@ public class HdfsComputeBolt extends BaseRichBolt {
         if(!resultQueue.isEmpty()){
             HdfsResult poll = resultQueue.poll();
             if(poll!=null){
-                outputCollector.emit(new Values(poll.getbytecount(),poll.getSystemMills()));
-                logger.info("------------ HdfsComputeBolt emit bytecountstream------------"+" time:"+poll.getSystemMills()+" bytecount:"+poll.getbytecount());
+                outputCollector.emit(tuple,new Values(poll.getbytecount(),poll.getSystemMills()));
+                logger.debug("------------ HdfsComputeBolt emit bytecountstream------------"+" time:"+poll.getSystemMills()+" bytecount:"+poll.getbytecount());
             }
-
         }
+        outputCollector.ack(tuple);
     }
 
     @Override

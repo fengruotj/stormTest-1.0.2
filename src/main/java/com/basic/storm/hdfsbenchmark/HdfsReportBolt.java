@@ -39,7 +39,8 @@ public class HdfsReportBolt extends BaseRichBolt {
         Timestamp timestamp=new Timestamp(currentTimeMills);
         WordCountTupleTask wordCountTupleTask=new WordCountTupleTask(timestamp,bytecount);
         executor.execute(wordCountTupleTask);
-        logger.info("timestamp:"+currentTimeMills+" bytecount:"+bytecount);
+        logger.debug("timestamp:"+currentTimeMills+" bytecount:"+bytecount);
+        outputCollector.ack(tuple);
     }
 
     public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {

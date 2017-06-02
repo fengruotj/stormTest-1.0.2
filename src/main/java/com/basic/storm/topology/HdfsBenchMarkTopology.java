@@ -15,7 +15,7 @@ import org.apache.storm.utils.Utils;
 
 /**
  * Created by 79875 on 2017/3/19.
- * 提交stormtopology任务 storm jar stormTest-1.0.2-SNAPSHOT.jar com.basic.storm.topology.HdfsBenchMarkTopology hdfsbenchmark 8 8 8 /benchmarks/TestDFSIO/io_data /user/root/output /user/root/baddir
+ * 提交stormtopology任务 storm jar stormTest-1.0.2-SNAPSHOT.jar com.basic.storm.topology.HdfsBenchMarkTopology hdfsbenchmark 8 8 8 /user/root/wordcount/input/resultTweets /user/root/output /user/root/baddir
  */
 public class HdfsBenchMarkTopology {
 
@@ -76,8 +76,6 @@ public class HdfsBenchMarkTopology {
         //Topology配置
         Config config=new Config();
         config.setNumWorkers(numworkers);//设置两个Worker进程
-        config.setNumAckers(0);//每个Work进程会运行一个Acker任务，这里将Ack任务设置为0 禁止Ack任务
-
         /**
          * 设置HDFS相关配置
          */
@@ -86,7 +84,6 @@ public class HdfsBenchMarkTopology {
         config.put(Configs.BAD_DIR, badDir);
         config.put(Configs.READER_TYPE, fileFormat);
         config.put(Configs.HDFS_URI, hdfsUri);
-
         //config.setDebug(true); 显示debug 信息由于打印每个tuple的内容会显著降低 吞吐量。吞吐量大致为7000左右
 
         if(args[0].equals("local")){

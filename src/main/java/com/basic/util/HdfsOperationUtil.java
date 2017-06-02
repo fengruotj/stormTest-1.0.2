@@ -292,5 +292,17 @@ public class HdfsOperationUtil {
         return length;
     }
 
+    /**
+     * 文件重命名
+     * @param srcPath
+     * @param dstPath
+     * @throws IOException
+     */
+    public void renameFile(String srcPath,String dstPath) throws IOException {
+        Path srcpath=new Path(srcPath);
+        Path dstpath=new Path(dstPath);
+        fs.rename(srcpath,dstpath);
+    }
+
 }
 
